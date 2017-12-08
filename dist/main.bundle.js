@@ -1017,6 +1017,7 @@ var SigninComponent = (function () {
         this.authService.signin(email, password)
             .subscribe(function (res) {
             _this.loading = false;
+            _this._router.navigate(['/watching']);
         }, function (err) {
             _this.loading = false;
             console.log(err);

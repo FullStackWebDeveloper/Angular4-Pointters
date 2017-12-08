@@ -38,6 +38,7 @@ export class SigninComponent implements OnInit {
       .subscribe(
         (res) => {
           this.loading = false;
+          this._router.navigate(['/watching']);
         },
         (err) => {
           this.loading = false;
