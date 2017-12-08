@@ -213,4 +213,12 @@
     }
 }
 
+.dropdown-menu .dropdown-menu-item {
+    border-bottom: 3px solid transparent;
+}
+
+.dropdown-menu .dropdown-menu-item.active {
+    border-bottom: 3px solid #00B4F1;
+}
+
 

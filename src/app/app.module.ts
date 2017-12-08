@@ -35,7 +35,8 @@ import { LikeComponent } from './components/like/like.component';
 import { LikeService } from './services/like.service';
 import { BuyService } from './services/buy.service';
 import { SellService } from './services/sell.service';
-
+import { ConversationService } from './services/conversation.service';
+import { ChatComponent } from './routes/chat/chat.component';
 
 
 let gapiClientConfig: NgGapiClientConfig = {
@@ -62,7 +63,8 @@ let gapiClientConfig: NgGapiClientConfig = {
     ServiceDetailComponent,
     BuySellComponent,
     OrdersComponent,
-    LikeComponent
+    LikeComponent,
+    ChatComponent
   ],
   imports: [
     BrowserModule,
@@ -76,7 +78,9 @@ let gapiClientConfig: NgGapiClientConfig = {
     }),
     RouterModule
   ],
-  providers: [ AuthService, ServiceService, WatchingService, UserService, LikeService, BuyService, SellService ],
+  providers: [ AuthService, ServiceService, WatchingService, UserService, LikeService, BuyService, SellService, 
+    ConversationService ],
+
   bootstrap: [ AppComponent ]
 })
 export class AppModule { }

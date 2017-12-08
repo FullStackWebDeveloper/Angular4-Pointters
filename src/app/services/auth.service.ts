@@ -23,14 +23,11 @@ import {
 
 import { environment } from './../../environments/environment';
 
-const httpOptions = {
-  headers: new HttpHeaders({ 'Content-Type': 'application/json' })
-};
-
 @Injectable()
 export class AuthService {
   public id    : string;
   public token : string;
+  public isLoggedIn: boolean;
   public fbData: FBLoginResponse;
 
   private apiUrl = environment.apiUrl;
@@ -41,6 +38,9 @@ export class AuthService {
     private googleAuth: GoogleAuthService
   ) {
     this.token = localStorage.getItem('token');
+
+    if (this.token) this.isLoggedIn = true;
+    else this.isLoggedIn = false;
 
     let initParams: InitParams = {
       appId: environment.FACEBOOK_APP_ID,
@@ -53,13 +53,18 @@ export class AuthService {
 
   signin(email: string, password: string) {
     const url = `${this.apiUrl}user/login`;
+    const httpOptions = {
+      headers: new HttpHeaders({
+        'Content-Type': 'application/json'
+      })
+    };
     return this.http.post(url, { email, password }, httpOptions)
       .pipe(
         tap((res: { token: string }) => {
           const { token } = res;
 
           this.token = token;
-          console.log(token)
+          this.isLoggedIn = true;
 
           localStorage.setItem('token', token);
 
@@ -69,14 +74,39 @@ export class AuthService {
       );
   }
 
+  signout() {
+    this.token = '';
+    this.isLoggedIn = false;
+    const url = `${this.apiUrl}user/logout`;
+    const httpOptions = {
+      headers: new HttpHeaders({
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${this.token}`
+      })
+    };
+    return this.http.post(url, {}, httpOptions)
+      .pipe(
+        tap((res) => {
+          return res;
+        }),
+        catchError((err: any) => Observable.throw({ status: err.status, ...err.error }))
+      );
+  }
+
   signup(email: string, password: string) {
     const url = `${this.apiUrl}user/signup`;
+    const httpOptions = {
+      headers: new HttpHeaders({
+        'Content-Type': 'application/json'
+      })
+    };
     return this.http.post(url, { email, password }, httpOptions)
       .pipe(
         tap((res: { id: string, token: string }) => {
           const { id, token } = res;
           this.id    = id;
           this.token = token;
+          this.isLoggedIn = true;
 
           localStorage.setItem('token', token);
 
